@@ -14,6 +14,17 @@ You will need the following tools properly installed on your computer.
 * [Git](http://git-scm.com/)
 * [Go](http://golang.org/)
 
+## Running Storage test
+
+```shell
+go test storagedata/storagedata_test.go
+```
+## Running API test
+
+```shell
+go test storagedata/storagedata_test.go
+```
+
 ## Running the service
 
 ```shell
