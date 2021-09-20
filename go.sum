@@ -1,0 +1,6 @@
+github.com/NeowayLabs/logger v0.0.0-20170104125500-04464868b8c5 h1:Y/aUBTq+NxErfB5plm/Aq/M5J9NY40cKiV+A+8JC7oI=
+github.com/NeowayLabs/logger v0.0.0-20170104125500-04464868b8c5/go.mod h1:rCJGddd4gkpNuh1Rmhp74U4kZjKAPnfoY3Zl+gKkgIw=
+github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
+github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
+github.com/vincent-petithory/dataurl v0.0.0-20191104211930-d1553a71de50 h1:uxE3GYdXIOfhMv3unJKETJEhw78gvzuQqRX/rVirc2A=
+github.com/vincent-petithory/dataurl v0.0.0-20191104211930-d1553a71de50/go.mod h1:FHafX5vmDzyP+1CQATJn7WFKc9CvnvxyvZy6I1MrG/U=

@@ -1,0 +1,6 @@
+{
+    "go.inferGopath": false,
+    "go.toolsEnvVars": {
+        "GOPROXY": "direct",
+    }
+}
