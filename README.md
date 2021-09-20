@@ -33,7 +33,7 @@ go run cmd/apiamericanas/main.go
 
 ## End Points
 
-## Send file
+### Send file
     
 POST /sendfile
 #### Curl example:
@@ -44,52 +44,52 @@ https://localhost:8081/sendfile \
 --data '{"path": "fromcurl"}' -v
 ```
 
-## Delete file
+### Delete file
     
 POST /delete?data=FileID
-### Curl example:
+#### Curl example:
 ```bash
 curl -X POST 'http://localhost:8081/delete?data=fa0ecd5f42635c34e2f879a24039988e'
 ```
 
-## All files
+### All files
     
 GET /allfiles
-### Curl example:
+#### Curl example:
 ```bash
 curl -X POST 'http://localhost:8081/allfiles'
 ```
     
     GET /storagedata/*filepath
 
-## Get file by id
+### Get file by id
     
 GET /byid?data=FileID
-### Curl example:
+#### Curl example:
 ```bash
 curl -X POST 'http://localhost:8081/byid?data=fa0ecd5f42635c34e2f879a24039988e'
 ```
 
-## Move file to another dir
+### Move file to another dir
     
  POST /movefile?data=FileID
-### Curl example:
+#### Curl example:
 ```bash
 curl -X POST 'http://localhost:8081/movefile?data=fa0ecd5f42635c34e2f879a24039988e'
 ```
 
-## Overwrite file
+### Overwrite file
     
 POST /overwrite?data=FileID
-### Curl example:
+#### Curl example:
 ```bash
 curl -X POST 'http://localhost:8081/overwrite?data=fa0ecd5f42635c34e2f879a24039988e'
 ```
 
-## Download file
+### Download file
     
 GET /storagedata/dirOfFile
-### Curl example:
+#### Curl example:
 ```bash
 curl -X GET 'http://localhost:8081/delete?data=fa0ecd5f42635c34e2f879a24039988e'
 ```
