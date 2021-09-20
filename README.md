@@ -14,18 +14,20 @@ You will need the following tools properly installed on your computer.
 * [Git](http://git-scm.com/)
 * [Go](http://golang.org/)
 
-## Running Storage test
+## Test
+
+### Storage test
 
 ```shell
 go test storagedata/storagedata_test.go
 ```
-## Running API test
+### API test
 
 ```shell
 go test storagedata/storagedata_test.go
 ```
 
-## Running the service
+## Starting the service
 
 ```shell
 go run cmd/apiamericanas/main.go
