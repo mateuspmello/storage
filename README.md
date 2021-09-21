@@ -96,7 +96,5 @@ curl \
 GET /storagedata/dirOfFile
 #### Curl example:
 ```bash
-curl -X GET 'http://localhost:8081/delete?data=fa0ecd5f42635c34e2f879a24039988e'
+curl -X GET 'http://localhost:8081/storagedata/ht/monthly/mars.png'
 ```
-
-    
