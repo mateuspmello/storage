@@ -68,7 +68,7 @@ curl -X POST 'http://localhost:8081/delete?data=fa0ecd5f42635c34e2f879a24039988e
 GET /byid?data=FileID
 #### Curl example:
 ```bash
-curl -X GET 'http://localhost:8081/byid?data=3771660c4bca091b42bd9b6fc0ae6529'
+curl -X GET 'http://localhost:8081/byid?data=0cb90ac871279cc942de976882b71a00'
 ```
 
 ### Move file to another dir
@@ -76,7 +76,7 @@ curl -X GET 'http://localhost:8081/byid?data=3771660c4bca091b42bd9b6fc0ae6529'
  POST /movefile?data=FileID
 #### Curl example:
 ```bash
-curl -X POST 'http://localhost:8081/movefile?data=3771660c4bca091b42bd9b6fc0ae6529' \
+curl -X POST 'http://localhost:8081/movefile?data=0cb90ac871279cc942de976882b71a00' \
 -d '{"directory": "solarsystem/planets"}'
 ```
 
@@ -87,7 +87,7 @@ POST /overwrite?data=FileID
 ```bash
 curl \
  -F file=@"/home/mateus-mello/go/src/americanas/test_files/perseverance.png" \
- http://localhost:8081/overwrite?data=d50e6011f7754f6e396d7083dc6c6107
+ http://localhost:8081/overwrite?data=0cb90ac871279cc942de976882b71a00
 
 ```
 
@@ -96,5 +96,5 @@ curl \
 GET /storagedata/dirOfFile
 #### Curl example:
 ```bash
-curl -X GET 'http://localhost:8081/storagedata/ht/monthly/mars.png'
+curl -X GET 'http://localhost:8081/storagedata/solarsystem/planets/perseverance.png'
 ```

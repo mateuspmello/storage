@@ -168,7 +168,7 @@ func (s *StorageData) MoveFile(id, toDir string) (int, error) {
 	toDirAndFile := toDirComplete + "/" + nameFile
 
 	os.MkdirAll(toDirComplete, os.ModePerm)
-	err = os.Rename(fromPath, toDirAndFile)
+	err = os.Rename(filepath.Join(getStorageDir(), fromPath), toDirAndFile)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
