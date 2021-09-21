@@ -35,7 +35,7 @@ func TestStorageFile(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "ht/monthly",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 
@@ -70,7 +70,7 @@ func TestAllFiles(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "ht/monthly",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 
@@ -109,7 +109,7 @@ func TestUnderDir(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "space/planets",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 	_, fileIDEarth, metadataEarth, _ := f.sd.StorageFile(req)
@@ -118,7 +118,7 @@ func TestUnderDir(t *testing.T) {
 	req = map[string]interface{}{
 		"path": "space/robots",
 		"file": p,
-		"name": "perseverance",
+		"name": "perseverance.png",
 		"type": "png",
 	}
 	_, fileIDPerseverance, _, _ := f.sd.StorageFile(req)
@@ -158,7 +158,7 @@ func TestByID(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "space/planets",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 	_, fileIDEarth, metadataEarth, _ := f.sd.StorageFile(req)
@@ -194,7 +194,7 @@ func TestMoveFile(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "space/planets",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 	_, fileIDEarth, _, _ := f.sd.StorageFile(req)
@@ -250,11 +250,12 @@ func TestOverwriteFile(t *testing.T) {
 	req := map[string]interface{}{
 		"path": "ht/monthly",
 		"file": e,
-		"name": "earth",
+		"name": "earth.png",
 		"type": "png",
 	}
 
-	_, fileID, _, err := f.sd.StorageFile(req)
+	_, fileID, meta, err := f.sd.StorageFile(req)
+	fmt.Println(meta)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -264,7 +265,7 @@ func TestOverwriteFile(t *testing.T) {
 	newMarsFile := map[string]interface{}{
 		"path": "ht/monthly",
 		"file": m,
-		"name": "mars",
+		"name": "mars.png",
 		"type": "png",
 	}
 

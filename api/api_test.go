@@ -285,7 +285,7 @@ func byIDFakeResult() []byte {
 
 func directory() []byte {
 	return []byte(`{		
-		"directory": "ht/monthly/blah.png"
+		"directory": "ht/monthly"
 	}`)
 }
 

@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -53,7 +54,8 @@ func (s *StorageData) StorageFile(body map[string]interface{}) (int, []byte, map
 	defer metadataFile.Close()
 
 	fileMap := make(map[string]interface{})
-	mtpath, _ := filepath.Abs("metadata.json")
+
+	mtpath := getMetaDataDir()
 	byteValue, _ := ioutil.ReadFile(mtpath)
 	err = json.Unmarshal(byteValue, &fileMap)
 	if err != nil {
@@ -151,7 +153,7 @@ func (s *StorageData) MoveFile(id, toDir string) (int, error) {
 		return http.StatusBadRequest, err
 	}
 
-	path, ok := mapWithId["path"].(string)
+	fromPath, ok := mapWithId["path"].(string)
 	if !ok {
 		return http.StatusBadRequest, err
 	}
@@ -161,17 +163,9 @@ func (s *StorageData) MoveFile(id, toDir string) (int, error) {
 		return http.StatusBadRequest, err
 	}
 
-	toDirComplete := ""
-	if toDirComplete, err = filepath.Abs(toDir); err != nil {
-		return http.StatusBadRequest, err
-	}
+	toDirComplete := filepath.Join(getStorageDir(), toDir)
 
 	toDirAndFile := toDirComplete + "/" + nameFile
-
-	fromPath := ""
-	if fromPath, err = filepath.Abs(path); err != nil {
-		return http.StatusBadRequest, err
-	}
 
 	os.MkdirAll(toDirComplete, os.ModePerm)
 	err = os.Rename(fromPath, toDirAndFile)
@@ -180,8 +174,6 @@ func (s *StorageData) MoveFile(id, toDir string) (int, error) {
 	}
 
 	mapWithId["path"] = toDir + "/" + nameFile
-	// aa := make(map[string]interface{})
-	// aa[id] = mapWithId
 	mapFileMetadata[id] = mapWithId
 	err = s.WriteMetadataInDisk(mapFileMetadata)
 	if err != nil {
@@ -207,13 +199,9 @@ func (s *StorageData) DeleteByID(id string) (int, error) {
 	if path, ok = mapWithId["path"].(string); !ok {
 		return http.StatusBadRequest, err
 	}
+	path = filepath.Join(getStorageDir(), path)
 
-	pathComplete := ""
-	if pathComplete, err = filepath.Abs(path); err != nil {
-		return http.StatusBadRequest, err
-	}
-
-	err = os.Remove(pathComplete)
+	err = os.Remove(path)
 	if err != nil {
 		return http.StatusBadRequest, err
 	}
@@ -275,10 +263,7 @@ func (s *StorageData) OverwriteFile(id string, body map[string]interface{}) (int
 }
 
 func (s *StorageData) openMetadataJSON(flags int) (*os.File, error) {
-	mtpath, err := filepath.Abs("metadata.json")
-	if err != nil {
-		return nil, err
-	}
+	mtpath := getMetaDataDir()
 
 	metadataFile, err := os.OpenFile(mtpath, flags, os.ModePerm)
 	if err != nil {
@@ -301,28 +286,30 @@ func (s *StorageData) saveFileInDisk(body map[string]interface{}) (*os.File, str
 	name := body["name"].(string)
 	typeFile := body["type"].(string)
 
-	_ = os.MkdirAll(path, os.ModePerm)
-	fullPath := fmt.Sprintf("%s/%s.%s", path, name, typeFile)
+	dir := filepath.Join(getStorageDir(), path)
+	_ = os.MkdirAll(dir, os.ModePerm)
+	fullPath := filepath.Join(dir, name)
 	_, fileExists := os.Stat(fullPath)
 
 	count := 1
 	for fileExists == nil {
-		fullPath = fmt.Sprintf("%s/%s(%v).%s", path, name, count, typeFile)
+		name = fmt.Sprintf("%s(%v).%s", name, count, typeFile)
+		fullPath = fmt.Sprintf("%s/%s", path, name)
 		count++
 		_, fileExists = os.Stat(fullPath)
 	}
 
 	file, err := os.OpenFile(fullPath, os.O_WRONLY|os.O_CREATE, os.ModePerm)
 	if err != nil {
-		return nil, "", "", err
+		return nil, "", "", fmt.Errorf("error in open file: %s / %v", fullPath, err)
 	}
 	// Copy the file to the destination path
 	_, err = io.Copy(file, bytes.NewReader(f.Bytes()))
 	if err != nil {
-		return nil, "", "", err
+		return nil, "", "", fmt.Errorf("error in copy: %v", err)
 	}
 
-	return file, fullPath, typeFile, err
+	return file, filepath.Join(path, name), typeFile, err
 }
 
 func (s *StorageData) WriteMetadataInDisk(newMetadata map[string]interface{}) error {
@@ -347,10 +334,7 @@ func (s *StorageData) WriteMetadataInDisk(newMetadata map[string]interface{}) er
 }
 
 func (s *StorageData) GetMetadataJSON() (map[string]interface{}, error) {
-	mtpath, err := filepath.Abs("metadata.json")
-	if err != nil {
-		return nil, err
-	}
+	mtpath := getMetaDataDir()
 
 	fileMetadata, err := ioutil.ReadFile(mtpath)
 	if err != nil {
@@ -390,4 +374,25 @@ func New() *StorageData {
 	sd := StorageData{}
 
 	return &sd
+}
+
+func getStorageDir() string {
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
+	if strings.Contains(basepath, "storagedata") {
+		return basepath
+	}
+	path := filepath.Join(basepath, "storagedata")
+
+	return path
+}
+
+func getMetaDataDir() string {
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
+	path := filepath.Join(basepath, "storagedata/metadata.json")
+	if strings.Contains(basepath, "storagedata") {
+		path = filepath.Join(basepath, "metadata.json")
+	}
+	return path
 }

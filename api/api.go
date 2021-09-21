@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -154,14 +155,23 @@ func (api *Api) delete(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 
 func (api *Api) overwrite(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id := api.getKeyFromURL(*r.URL)
-	body, err := api.readBody(w, r.Body)
+	body, err := api.readBodyMultiPart(w, r)
 	if err != nil {
 		fmt.Printf("[overwrite] Error in readBody. error %v", err.Error())
-		errMap := map[string]interface{}{"error": err.Error()}
+		errMap := map[string]interface{}{"error": fmt.Errorf("[overwrite] Erro in API %s", err.Error())}
 		api.send(w, http.StatusBadRequest, errMap)
 		return
 	}
 
+	_, file, _ := api.storageDocument.ByID(id)
+	var m map[string]interface{}
+	if err := json.Unmarshal(file, &m); err != nil {
+		errMap := map[string]interface{}{"error": fmt.Errorf("[overwrite] Erro in API %s", err.Error())}
+		api.send(w, http.StatusBadRequest, errMap)
+		return
+	}
+	hh := strings.Split(m["path"].(string), "/")
+	body["path"] = strings.Join(hh[:len(hh)-1], "/")
 	statusCode, ret, err := api.storageDocument.OverwriteFile(id, body)
 	if statusCode != http.StatusOK {
 		fmt.Printf("[overwrite] Error in overwrite with statusCode: %v - error %v", statusCode, err.Error())
